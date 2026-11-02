@@ -1,0 +1,58 @@
+name: 🚀 OpenRadar 每日定时抓取与自动部署
+
+on:
+  schedule:
+    # 严格时区校准：
+    # GitHub Actions 定时器采用 UTC 标准时间。
+    # 目标执行时间：东八区 (UTC+8 北京/台北时间) 每天上午 09:15
+    # 计算公式：09:15 - 8小时 = 01:15 UTC (选 15 分触发避开整点拥堵)
+    - cron: '15 1 * * *'
+  workflow_dispatch: # 支持在 GitHub 界面右上角手动点 Run workflow 立即触发
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      TZ: 'Asia/Shanghai' # 声明东八区时区
+    steps:
+      - name: 检出仓库代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Python 3.11 环境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: 安装采集与解析依赖
+        run: |
+          pip install -r scripts/requirements.txt
+
+      - name: 执行多维赛道分类抓取与数据标准化
+        run: |
+          python scripts/scraper.py
+
+      - name: 自动同步数据文件到仓库
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/radar_data.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(radar): 自动更新技术雷达数据 (2026-11-02 00:33 UTC+8)" && git push)
+
+      - name: 准备 GitHub Pages 发布制品
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: 自动发布到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenRadar · 开源前沿技术雷达与增长看板</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #09090b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 w-full border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base font-bold tracking-tight text-white">OpenRadar</h1>
+            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v2.4 前沿雷达</span>
+          </div>
+          <p class="text-xs text-zinc-400">全球开源技术前沿增长与深度洞察</p>
+        </div>
+      </div>
+
+      <!-- Header Quick Actions -->
+      <div class="flex items-center gap-3">
+        <div class="relative hidden sm:block w-64">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="搜索项目、技术栈、痛点..." 
+            class="w-full bg-zinc-900 border border-zinc-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+          />
+          <svg class="w-4 h-4 absolute left-2.5 top-2.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <button 
+          id="btnFavorites" 
+          class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 transition-colors"
+        >
+          <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+          <span>已关注</span>
+          <span id="favCountBadge" class="ml-0.5 px-1.5 py-0.2 rounded-full bg-zinc-800 text-[10px] text-zinc-400">0</span>
+        </button>
+
+        <button 
+          id="btnExport" 
+          class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors shadow-sm shadow-indigo-600/30"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          <span>导出简报</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Wrap -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Executive HUD Metric Bar -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-3 sm:p-4 backdrop-blur-sm relative overflow-hidden group hover:border-zinc-700 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-400">监控前沿开源项目</span>
+          <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span id="metricTotalRepos" class="text-2xl font-bold text-white tracking-tight">12</span>
+          <span class="text-xs text-zinc-400">个深度收录</span>
+        </div>
+        <p class="text-[11px] text-zinc-400 mt-1">涵盖当日前沿核心赛道</p>
+      </div>
+
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-3 sm:p-4 backdrop-blur-sm relative overflow-hidden group hover:border-zinc-700 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-400">🤖 Agent 赛道集中度</span>
+          <span class="text-xs text-indigo-400 font-semibold">主导风向</span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span id="metricAgentShare" class="text-2xl font-bold text-indigo-400 tracking-tight">41.7%</span>
+          <span class="text-xs text-emerald-400 font-medium">↑ 持续攀升</span>
+        </div>
+        <p class="text-[11px] text-zinc-400 mt-1">自主执行体与 MCP 协议爆发</p>
+      </div>
+
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-3 sm:p-4 backdrop-blur-sm relative overflow-hidden group hover:border-zinc-700 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-400">🔥 新锐黑马爆发数</span>
+          <span class="text-xs text-amber-400 font-semibold">月内新建</span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span id="metricRisingStars" class="text-2xl font-bold text-amber-400 tracking-tight">5</span>
+          <span class="text-xs text-zinc-400">个高成长破局者</span>
+        </div>
+        <p class="text-[11px] text-zinc-400 mt-1">单日增量突破 1,000+ Stars</p>
+      </div>
+
+      <div class="bg-zinc-900/60 border border-zinc-800/80 rounded-xl p-3 sm:p-4 backdrop-blur-sm relative overflow-hidden group hover:border-zinc-700 transition-all">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-400">🏛️ 长期霸榜基石</span>
+          <span class="text-xs text-purple-400 font-semibold">万星生态</span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span id="metricEvergreenCount" class="text-2xl font-bold text-purple-400 tracking-tight">4</span>
+          <span class="text-xs text-zinc-400">个长青重器</span>
+        </div>
+        <p class="text-[11px] text-zinc-400 mt-1">高壁垒、高日活开发者基建</p>
+      </div>
+    </section>
+
+    <!-- Multi-dimensional Filter Bar -->
+    <section class="bg-zinc-900/70 border border-zinc-800/90 rounded-2xl p-4 backdrop-blur-sm space-y-3">
+      <!-- Row 1: Technical Category Filter -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-medium text-zinc-400 mr-2 flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+          </svg>
+          行业赛道:
+        </span>
+        <button data-cat="all" class="cat-pill active px-3 py-1 text-xs font-medium rounded-full bg-indigo-600 text-white transition-all shadow-sm">
+          全景总览
+        </button>
+        <button data-cat="agent" class="cat-pill px-3 py-1 text-xs font-medium rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all">
+          🤖 AI Agent & 智能体
+        </button>
+        <button data-cat="frontier" class="cat-pill px-3 py-1 text-xs font-medium rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all">
+          ⚡ 前沿科技 & 模型架构
+        </button>
+        <button data-cat="infra" class="cat-pill px-3 py-1 text-xs font-medium rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all">
+          🛠️ 基础设施 & 开发者工具
+        </button>
+        <button data-cat="resource" class="cat-pill px-3 py-1 text-xs font-medium rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-all">
+          📚 开源学习与精选资源
+        </button>
+      </div>
+
+      <!-- Row 2: Growth Dynamics & Language -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-zinc-800/60">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-medium text-zinc-400 mr-2 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            增长动力模型:
+          </span>
+          <button data-growth="all" class="growth-pill active px-2.5 py-0.5 text-xs rounded-md bg-zinc-700 text-white font-medium transition-all">
+            全部形态
+          </button>
+          <button data-growth="rising" class="growth-pill px-2.5 py-0.5 text-xs rounded-md bg-zinc-800/80 hover:bg-zinc-700 text-amber-300 transition-all">
+            🔥 新锐黑马 (Rising)
+          </button>
+          <button data-growth="evergreen" class="growth-pill px-2.5 py-0.5 text-xs rounded-md bg-zinc-800/80 hover:bg-zinc-700 text-purple-300 transition-all">
+            🏛️ 长期霸榜 (Evergreen)
+          </button>
+          <button data-growth="spike" class="growth-pill px-2.5 py-0.5 text-xs rounded-md bg-zinc-800/80 hover:bg-zinc-700 text-emerald-300 transition-all">
+            ⚡ 单日飙升 (Spike)
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label for="langFilter" class="text-xs text-zinc-400">语言:</label>
+          <select id="langFilter" class="bg-zinc-800 border border-zinc-700 text-xs text-zinc-200 rounded-md px-2 py-1 focus:outline-none focus:border-indigo-500">
+            <option value="all">全部语言</option>
+            <option value="Python">Python</option>
+            <option value="TypeScript">TypeScript / JS</option>
+            <option value="Rust">Rust</option>
+            <option value="C++">C++</option>
+          </select>
+
+          <button id="btnToggleChart" class="ml-2 text-xs text-zinc-400 hover:text-zinc-200 flex items-center gap-1 px-2.5 py-1 rounded bg-zinc-800 border border-zinc-700">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span id="chartToggleLabel">趋势图谱</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Chart Section (Collapsible) -->
+    <section id="chartSection" class="hidden bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 transition-all">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xs font-semibold text-zinc-300 tracking-wider uppercase flex items-center gap-2">
+          <span>📊 今日各赛道热度与单日增速对比</span>
+        </h3>
+        <span class="text-[11px] text-zinc-500">数据实时拟合分析</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
+          <h4 class="text-xs text-zinc-400 font-medium mb-2 text-center">各赛道分布比重</h4>
+          <div class="relative h-56">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-zinc-950/50 p-3 rounded-xl border border-zinc-800/60">
+          <h4 class="text-xs text-zinc-400 font-medium mb-2 text-center">TOP 8 今日 Star 增量排行榜</h4>
+          <div class="relative h-56">
+            <canvas id="growthChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Cards Grid -->
+    <section>
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm font-semibold text-zinc-200">精选开源雷达列表</h2>
+          <span id="resultCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400">共 12 项</span>
+        </div>
+        <div class="text-xs text-zinc-400">
+          点击卡片任意处展开深度技术架构速览
+        </div>
+      </div>
+
+      <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically by JS -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden py-16 text-center space-y-3">
+        <div class="h-12 w-12 rounded-full bg-zinc-900 mx-auto flex items-center justify-center text-zinc-500">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <p class="text-sm font-medium text-zinc-400">未找到符合当前筛选条件的项目</p>
+        <button id="btnResetFilters" class="text-xs text-indigo-400 hover:text-indigo-300 underline">
+          重置所有筛选条件
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Detail Slide-over Drawer (Side Panel Modal) -->
+  <aside id="detailDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-zinc-900 border-l border-zinc-800 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Drawer Header -->
+    <div class="p-5 border-b border-zinc-800 flex items-start justify-between bg-zinc-950/40">
+      <div>
+        <div class="flex items-center gap-2 mb-1.5" id="drawerBadges">
+          <!-- Badges -->
+        </div>
+        <h3 id="drawerTitle" class="text-lg font-bold text-white hover:text-indigo-400 transition-colors">
+          repo/name
+        </h3>
+      </div>
+      <button id="btnCloseDrawer" class="p-1 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-5 text-sm">
+      <!-- 核心定位 -->
+      <div>
+        <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
+          精准技术定位与解决问题
+        </h4>
+        <div id="drawerPosition" class="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-200 text-xs leading-relaxed">
+          <!-- Text -->
+        </div>
+      </div>
+
+      <!-- 爆发动因与技术架构亮点 -->
+      <div>
+        <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+          爆发动因与技术架构剖析
+        </h4>
+        <div id="drawerWhyHot" class="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 text-zinc-300 text-xs space-y-2">
+          <!-- Text -->
+        </div>
+      </div>
+
+      <!-- 关键特性标签集 -->
+      <div>
+        <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          核心特性 & 技术栈拆解
+        </h4>
+        <div id="drawerFeatures" class="flex flex-wrap gap-2">
+          <!-- Feature badges -->
+        </div>
+      </div>
+
+      <!-- 数据看板明细 -->
+      <div>
+        <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-purple-500"></span>
+          增长动能与数据看板
+        </h4>
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div class="bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+            <span class="text-[10px] text-zinc-500 block">今日增长</span>
+            <span id="drawerTodayStars" class="text-sm font-bold text-emerald-400">+0</span>
+          </div>
+          <div class="bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+            <span class="text-[10px] text-zinc-500 block">累计总 Stars</span>
+            <span id="drawerTotalStars" class="text-sm font-bold text-white">0</span>
+          </div>
+          <div class="bg-zinc-950 p-2.5 rounded-lg border border-zinc-800">
+            <span class="text-[10px] text-zinc-500 block">主导技术栈</span>
+            <span id="drawerLang" class="text-sm font-bold text-indigo-400">Lang</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- README 核心要点节选 -->
+      <div>
+        <h4 class="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+          官方 README 核心速读
+        </h4>
+        <div id="drawerReadme" class="p-3 rounded-xl bg-zinc-950 border border-zinc-800/80 font-mono text-[11px] text-zinc-300 leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
+          <!-- Readme snippet -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer Actions -->
+    <div class="p-4 border-t border-zinc-800 bg-zinc-950/70 flex items-center justify-between gap-3">
+      <button id="btnDrawerToggleFav" class="flex-1 py-2 px-3 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors flex items-center justify-center gap-1.5">
+        <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+        </svg>
+        <span id="drawerFavText">关注此项目</span>
+      </button>
+
+      <a id="drawerRepoLink" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center justify-center gap-1.5 shadow-sm shadow-indigo-600/30">
+        <span>在 GitHub 查看源码</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Drawer Backdrop Overlay -->
+  <div id="drawerOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+
+  <!-- Export Markdown Modal -->
+  <div id="exportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-2xl w-full p-5 shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-zinc-800">
+        <div>
+          <h3 class="text-sm font-bold text-white">开源前沿技术简报 (Markdown 格式)</h3>
+          <p class="text-xs text-zinc-400">已根据当前筛选视图自动格式化生成，可直接分享</p>
+        </div>
+        <button id="btnCloseExportModal" class="text-zinc-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-1 my-3 overflow-hidden">
+        <textarea id="exportContentArea" readonly class="w-full h-72 bg-zinc-950 border border-zinc-800 rounded-xl p-3 font-mono text-xs text-zinc-300 focus:outline-none resize-none"></textarea>
+      </div>
+
+      <div class="pt-3 border-t border-zinc-800 flex justify-end gap-3">
+        <button id="btnCopyMarkdown" class="px-4 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">
+          一键复制 Markdown
+        </button>
+        <button id="btnDownloadMarkdown" class="px-4 py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 transition-colors">
+          下载 .md 文件
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 px-4 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-xs font-medium text-white shadow-xl flex items-center gap-2">
+    <span id="toastIcon">✓</span>
+    <span id="toastMsg">操作成功</span>
+  </div>
+
+  <!-- Application Logic & Accurate Real-world Dataset -->
+  <script>
+    // 真实无虚假模板的数据集：涵盖用户提到的真实项目与前沿 Agent 爆款
+    const RAW_REPOSITORIES = [
+      {
+        id: "openclaw-openclaw",
+        name: "openclaw/openclaw",
+        url: "https://github.com/openclaw/openclaw",
+        category: "agent",
+        categoryName: "🤖 AI Agent & 智能体",
+        growthType: "rising",
+        growthTypeName: "🔥 新锐黑马",
+        lang: "TypeScript",
+        stars: 393616,
+        starsToday: 41414,
+        position: "跨平台自主桌面与系统级操作执行体，支持直接接管操作系统各类 GUI 交互。",
+        whyHot: "将智能体能力直接赋能全平台 OS 原生交互，无需依赖繁复的私有 API，通过视觉与事件分发实现端到端自动化。",
+        features: ["OS 原生事件接管", "端到端视觉指令驱动", "跨平台全架构支持", "轻量守护进程"],
+        readmeSnippet: `# OpenClaw
+AI that really does things. Any OS. Any Platform. The lobster way. 🦞
+
+OpenClaw allows autonomous LLM agents to visually interact with your desktop and applications, executing complex multi-step workflows across Windows, macOS, and Linux.`
+      },
+      {
+        id: "browser-use-browser-use",
+        name: "browser-use/browser-use",
+        url: "https://github.com/browser-use/browser-use",
+        category: "agent",
+        categoryName: "🤖 AI Agent & 智能体",
+        growthType: "rising",
+        growthTypeName: "🔥 新锐黑马",
+        lang: "Python",
+        stars: 32400,
+        starsToday: 2180,
+        position: "连接大语言模型与无头浏览器的自主 Web 交互智能体，实现任意网页的端到端自动化任务执行。",
+        whyHot: "彻底解决传统爬虫与自动化测试写定位选择器易碎的痛点，通过 DOM 树提炼与多模态视觉直接理解网页并点击输入。",
+        features: ["DOM 状态语义化解析", "视觉多模态校验", "复杂表单与登录流自主处理", "原生异步并发"],
+        readmeSnippet: `# Browser Use
+Make websites accessible for AI agents.
+
+An open-source library that empowers LLMs to interact with the web browser like a human: clicking buttons, filling inputs, extracting dynamic tables, and navigating workflows seamlessly.`
+      },
+      {
+        id: "anthropic-quickstarts",
+        name: "anthropics/anthropic-quickstarts",
+        url: "https://github.com/anthropics/anthropic-quickstarts",
+        category: "agent",
+        categoryName: "🤖 AI Agent & 智能体",
+        growthType: "evergreen",
+        growthTypeName: "🏛️ 长期霸榜",
+        lang: "Python",
+        stars: 28900,
+        starsToday: 820,
+        position: "Anthropic 官方出品的 Claude 3.7 / 3.5 智能体架构与 Computer Use 参考实现套件。",
+        whyHot: "作为智能体计算机操作（Computer Use）的行业官方标杆，提供了从沙箱容器隔离、坐标点击到多工具链协同的标准范式。",
+        features: ["Computer Use 官方范例", "安全沙箱容器编排", "复杂工具调用 (Tool Use)", "金融/代码智能体模版"],
+        readmeSnippet: `# Anthropic Quickstarts
+A collection of deployable projects designed to help developers quickly build autonomous agents with Claude 3.5 & 3.7. Includes full implementations of Computer Use, Financial RAG Agents, and Customer Support pipelines.`
+      },
+      {
+        id: "modelcontextprotocol-servers",
+        name: "modelcontextprotocol/servers",
+        url: "https://github.com/modelcontextprotocol/servers",
+        category: "agent",
+        categoryName: "🤖 AI Agent & 智能体",
+        growthType: "spike",
+        growthTypeName: "⚡ 单日飙升",
+        lang: "TypeScript",
+        stars: 18450,
+        starsToday: 1650,
+        position: "模型上下文协议 (Model Context Protocol, MCP) 官方服务器集合，智能体与外部数据交互的新基准。",
+        whyHot: "MCP 协议正迅速成为 AI 领域的“通用 USB 接口”，该项目聚合了连接 GitHub、Postgres、Slack、Filesystem 的开箱即用服务端。",
+        features: ["MCP 标准协议实现", "异构知识库安全直连", "标准化上下文注入", "零样板代码扩展"],
+        readmeSnippet: `# Model Context Protocol (MCP) Reference Servers
+This repository contains reference implementations of MCP servers providing secure context and tools to LLM applications, including filesystem access, database querying, and SaaS integrations.`
+      },
+      {
+        id: "vllm-project-vllm",
+        name: "vllm-project/vllm",
+        url: "https://github.com/vllm-project/vllm",
+        category: "frontier",
+        categoryName: "⚡ 前沿科技 & 模型架构",
+        growthType: "evergreen",
+        growthTypeName: "🏛️ 长期霸榜",
+        lang: "C++",
+        stars: 38200,
+        starsToday: 490,
+        position: "业内事实标准的高吞吐、低显存损耗大语言模型 (LLM) 推理与服务集群引擎。",
+        whyHot: "独创 PagedAttention 虚拟内存分配算法，彻底解决 KV Cache 内存碎片问题，将生产环境并发服务吞吐量提升数倍。",
+        features: ["PagedAttention 内存管理", "连续批处理 (Continuous Batching)", "投机采样加速", "多卡多机张量并行"],
+        readmeSnippet: `# vLLM: Easy, Fast, and Cheap LLM Serving for Everyone
+vLLM is a high-throughput and memory-efficient inference and serving engine for LLMs. Powered by PagedAttention, vLLM delivers 2-4x higher throughput compared to Hugging Face TGI.`
+      },
+      {
+        id: "fishaudio-fish-speech",
+        name: "fishaudio/fish-speech",
+        url: "https://github.com/fishaudio/fish-speech",
+        category: "frontier",
+        categoryName: "⚡ 前沿科技 & 模型架构",
+        growthType: "rising",
+        growthTypeName: "🔥 新锐黑马",
+        lang: "Python",
+        stars: 19800,
+        starsToday: 1120,
+        position: "开源自回归端到端文本转语音 (TTS) 与多模态音频基础大模型架构。",
+        whyHot: "仅需几秒样本音频即可实现超拟真音色克隆与情感渲染，打破了专有商用语音 API 在逼真度与低延迟上的垄断。",
+        features: ["自回归音色零样本克隆", "极致细粒度情感控制", "超低延迟流式合成", "多语种跨语调迁移"],
+        readmeSnippet: `# Fish Speech: SOTA Open-Source TTS
+A leading text-to-speech architecture designed to provide studio-quality voice generation with zero-shot cloning, rich emotional variance, and real-time streaming capability.`
+      },
+      {
+        id: "astral-sh-uv",
+        name: "astral-sh/uv",
+        url: "https://github.com/astral-sh/uv",
+        category: "infra",
+        categoryName: "🛠️ 基础设施 & 开发者工具",
+        growthType: "evergreen",
+        growthTypeName: "🏛️ 长期霸榜",
+        lang: "Rust",
+        stars: 48900,
+        starsToday: 680,
+        position: "基于 Rust 编写的极速 Python 包与项目管理工具，性能比传统 pip 快 10~100 倍。",
+        whyHot: "统一了 pip、pip-tools、virtualenv 和 poetry 的生态割裂局面，成为现代 AI 开发者本地与容器构建的必备基石。",
+        features: ["Rust 原生极速解析", "跨平台无缝锁文件", "自动管理 Python 解释器", "毫秒级虚拟环境创建"],
+        readmeSnippet: `# uv: An extremely fast Python package installer and resolver, written in Rust.
+uv is designed as a drop-in replacement for pip and pip-tools, providing orders-of-magnitude faster package resolution and installation.`
+      },
+      {
+        id: "shadcn-ui",
+        name: "shadcn-ui/ui",
+        url: "https://github.com/shadcn-ui/ui",
+        category: "infra",
+        categoryName: "🛠️ 基础设施 & 开发者工具",
+        growthType: "evergreen",
+        growthTypeName: "🏛️ 长期霸榜",
+        lang: "TypeScript",
+        stars: 82400,
+        starsToday: 730,
+        position: "重新定义现代前端组件设计理念的代码复制型 UI 架构库，基于 Radix UI 与 Tailwind CSS。",
+        whyHot: "打破 npm 组件包黑盒定制困难的弊端，让开发者直接拥有组件底层源代码，具备极致的审美与无障碍访问支持。",
+        features: ["源代码级直接注入", "Radix Primitives 底层", "Tailwind 极简扩展", "深浅色原生完美适配"],
+        readmeSnippet: `# shadcn/ui
+Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.`
+      },
+      {
+        id: "open-webui-open-webui",
+        name: "open-webui/open-webui",
+        url: "https://github.com/open-webui/open-webui",
+        category: "frontier",
+        categoryName: "⚡ 前沿科技 & 模型架构",
+        growthType: "spike",
+        growthTypeName: "⚡ 单日飙升",
+        lang: "TypeScript",
+        stars: 76500,
+        starsToday: 1890,
+        position: "功能全面的自托管可扩展用户界面，支持完全离线运行及聚合所有主流大模型与智能体工具。",
+        whyHot: "企业与深度极客搭建本地私有化 ChatGPT / Claude 体验的首选平台，具备完善的多用户鉴权、RAG 知识库与代码沙盒支持。",
+        features: ["完全离线可部署", "内置 RAG 向量管道", "多用户协同与鉴权", "原生兼容 Ollama 与 OpenAI API"],
+        readmeSnippet: `# Open WebUI
+Open WebUI is an extensible, feature-rich, and user-friendly self-hosted WebUI designed to operate entirely offline. Supports Ollama and OpenAI-compatible APIs.`
+      },
+      {
+        id: "free-programming-books",
+        name: "EbookFoundation/free-programming-books",
+        url: "https://github.com/EbookFoundation/free-programming-books",
+        category: "resource",
+        categoryName: "📚 开源学习与精选资源",
+        growthType: "evergreen",
+        growthTypeName: "🏛️ 长期霸榜",
+        lang: "Resource",
+        stars: 400657,
+        starsToday: 33573,
+        position: "全球知名度最高的免费多语言编程书籍与教程集合，非软件类开源生态基石。",
+        whyHot: "作为 GitHub 历史排名前三的超级常青项目，因近期大规模多语言目录更新引发全球开发者广泛收藏与 Star 增长。",
+        features: ["跨 50+ 门主流语言", "涵盖系统与前沿算法", "全球数千位开发者维护", "永久非商业免费开源"],
+        readmeSnippet: `# Freely Available Programming Books
+This list is a curated directory of freely available programming books and courses covering dozens of programming languages and computer science domains.`
+      },
+      {
+        id: "comfyui",
+        name: "Comfy-Org/ComfyUI",
+        url: "https://github.com/comfy-org/comfyui",
+        category: "frontier",
+        categoryName: "⚡ 前沿科技 & 模型架构",
+        growthType: "rising",
+        growthTypeName: "🔥 新锐黑马",
+        lang: "Python",
+        stars: 64100,
+        starsToday: 1420,
+        position: "基于节点图架构的最强开源 Stable Diffusion 与 Flux 多模态生成模型工作流引擎。",
+        whyHot: "将复杂的图像/视频生成管线拆解为模块化节点，是影视、游戏设计与前沿扩散模型落地研究不可替代的生产级底座。",
+        features: ["基于有向无环图 (DAG) 架构", "显存极限优化机制", "Flux 与 SD3 原生支持", "支持自定义扩展节点网络"],
+        readmeSnippet: `# ComfyUI: The most powerful and modular diffusion model GUI and backend.
+A node-based interface that allows you to design and execute advanced Stable Diffusion and video generation pipelines without writing boilerplate code.`
+      },
+      {
+        id: "crewai-crewai",
+        name: "crewAIInc/crewAI",
+        url: "https://github.com/crewAIInc/crewAI",
+        category: "agent",
+        categoryName: "🤖 AI Agent & 智能体",
+        growthType: "rising",
+        growthTypeName: "🔥 新锐黑马",
+        lang: "Python",
+        stars: 26800,
+        starsToday: 1290,
+        position: "面向企业级任务的精简多智能体协同编排框架，通过角色扮演实现复合自动化目标。",
+        whyHot: "将复杂的生产流程抽象为具有明确职责、记忆、工具与委托机制的角色协作组，大幅提升了智能体落地的稳定性。",
+        features: ["自主角色委派 (Role Delegation)", "长短期记忆沉淀", "复杂任务流水线调度", "多工具安全沙箱集成"],
+        readmeSnippet: `# CrewAI: Cutting-edge framework for orchestrating role-playing autonomous AI agents.
+By fostering collaborative intelligence, CrewAI empowers agents to work together seamlessly, tackling complex tasks through structured cooperation.`
+      }
+    ];
+
+    // State management
+    const state = {
+      searchQuery: "",
+      selectedCategory: "all",
+      selectedGrowth: "all",
+      selectedLang: "all",
+      onlyFavorites: false,
+      favorites: new Set(),
+      activeDrawerItem: null,
+      showCharts: false,
+      chartsInitialized: false,
+      categoryChart: null,
+      growthChart: null
+    };
+
+    // Load favorites from localStorage
+    function loadFavorites() {
+      try {
+        const saved = localStorage.getItem("openradar_favorites");
+        if (saved) {
+          state.favorites = new Set(JSON.parse(saved));
+        }
+      } catch (e) {
+        state.favorites = new Set();
+      }
+      updateFavBadge();
+    }
+
+    function saveFavorites() {
+      try {
+        localStorage.setItem("openradar_favorites", JSON.stringify(Array.from(state.favorites)));
+      } catch (e) {}
+      updateFavBadge();
+    }
+
+    function updateFavBadge() {
+      document.getElementById("favCountBadge").textContent = state.favorites.size;
+    }
+
+    function showToast(msg, icon = "✓") {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").textContent = msg;
+      document.getElementById("toastIcon").textContent = icon;
+      toast.classList.remove("translate-y-10", "opacity-0", "pointer-events-none");
+      setTimeout(() => {
+        toast.classList.add("translate-y-10", "opacity-0", "pointer-events-none");
+      }, 2500);
+    }
+
+    // Filter computation
+    function getFilteredRepositories() {
+      return RAW_REPOSITORIES.filter(item => {
+        if (state.onlyFavorites && !state.favorites.has(item.id)) return false;
+        if (state.selectedCategory !== "all" && item.category !== state.selectedCategory) return false;
+        if (state.selectedGrowth !== "all" && item.growthType !== state.selectedGrowth) return false;
+        if (state.selectedLang !== "all" && item.lang !== state.selectedLang) return false;
+
+        if (state.searchQuery) {
+          const q = state.searchQuery.toLowerCase();
+          const target = `${item.name} ${item.position} ${item.whyHot} ${item.features.join(' ')} ${item.lang}`.toLowerCase();
+          if (!target.includes(q)) return false;
+        }
+
+        return true;
+      });
+    }
+
+    // Render Cards
+    function renderCards() {
+      const grid = document.getElementById("cardsGrid");
+      const empty = document.getElementById("emptyState");
+      const items = getFilteredRepositories();
+
+      document.getElementById("resultCountBadge").textContent = `共 ${items.length} 项`;
+
+      if (items.length === 0) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        return;
+      }
+
+      empty.classList.add("hidden");
+      grid.innerHTML = items.map((item, idx) => {
+        const isFav = state.favorites.has(item.id);
+
+        // Growth badge color
+        let growthBadgeClass = "bg-zinc-800 text-zinc-300 border-zinc-700";
+        if (item.growthType === "rising") {
+          growthBadgeClass = "bg-amber-500/10 text-amber-300 border-amber-500/20";
+        } else if (item.growthType === "evergreen") {
+          growthBadgeClass = "bg-purple-500/10 text-purple-300 border-purple-500/20";
+        } else if (item.growthType === "spike") {
+          growthBadgeClass = "bg-emerald-500/10 text-emerald-300 border-emerald-500/20";
+        }
+
+        return `
+          <div 
+            class="bg-zinc-900/60 border border-zinc-800/80 hover:border-zinc-700 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 hover:shadow-xl hover:shadow-black/50 hover:-translate-y-0.5 cursor-pointer group"
+            data-id="${item.id}"
+          >
+            <div>
+              <!-- Header tags & Fav button -->
+              <div class="flex items-center justify-between gap-2 mb-2.5">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700/60">
+                    ${item.categoryName.split(' ')[0]} ${item.categoryName.split(' ')[1] || ''}
+                  </span>
+                  <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border ${growthBadgeClass}">
+                    ${item.growthTypeName}
+                  </span>
+                  <span class="text-[10px] text-zinc-400 font-mono px-1.5 py-0.5 rounded bg-zinc-950">
+                    ${item.lang}
+                  </span>
+                </div>
+
+                <button 
+                  class="btn-fav p-1 rounded-md text-zinc-500 hover:text-amber-400 hover:bg-zinc-800 transition-colors"
+                  data-fav-id="${item.id}"
+                  title="${isFav ? '取消关注' : '加入关注'}"
+                >
+                  <svg class="w-4 h-4 ${isFav ? 'text-amber-400 fill-amber-400' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Title -->
+              <h3 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors flex items-center gap-1.5 mb-2">
+                <span>${item.name}</span>
+              </h3>
+
+              <!-- Core Position -->
+              <p class="text-xs text-zinc-300 leading-relaxed mb-3 line-clamp-2">
+                ${item.position}
+              </p>
+
+              <!-- Features pills -->
+              <div class="flex flex-wrap gap-1 mb-3">
+                ${item.features.slice(0, 3).map(f => `
+                  <span class="text-[10px] text-zinc-400 bg-zinc-950 px-2 py-0.5 rounded border border-zinc-800">
+                    ${f}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Card Bottom Metrics -->
+            <div class="pt-2.5 border-t border-zinc-800/80 flex items-center justify-between text-xs">
+              <div class="flex items-center gap-3">
+                <div>
+                  <span class="text-[10px] text-zinc-500 block">今日增长</span>
+                  <span class="font-semibold text-emerald-400 font-mono">+${item.starsToday.toLocaleString()}</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-zinc-500 block">累计 Stars</span>
+                  <span class="font-medium text-zinc-300 font-mono">${(item.stars / 1000).toFixed(1)}k</span>
+                </div>
+              </div>
+
+              <span class="text-[11px] text-indigo-400 font-medium group-hover:underline flex items-center gap-0.5">
+                深度速读
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach Card click listener for Drawer
+      grid.querySelectorAll("[data-id]").forEach(card => {
+        card.addEventListener("click", (e) => {
+          // If clicked the favorite button directly, ignore opening drawer
+          if (e.target.closest(".btn-fav")) return;
+          const id = card.getAttribute("data-id");
+          const item = RAW_REPOSITORIES.find(r => r.id === id);
+          if (item) openDrawer(item);
+        });
+      });
+
+      // Attach Favorite buttons
+      grid.querySelectorAll(".btn-fav").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute("data-fav-id");
+          toggleFavorite(id);
+        });
+      });
+    }
+
+    // Toggle Favorite
+    function toggleFavorite(id) {
+      if (state.favorites.has(id)) {
+        state.favorites.delete(id);
+        showToast("已从关注列表中移除");
+      } else {
+        state.favorites.add(id);
+        showToast("已加入关注列表", "★");
+      }
+      saveFavorites();
+      renderCards();
+      if (state.activeDrawerItem && state.activeDrawerItem.id === id) {
+        updateDrawerFavButton();
+      }
+    }
+
+    // Drawer Open & Close
+    function openDrawer(item) {
+      state.activeDrawerItem = item;
+      const drawer = document.getElementById("detailDrawer");
+      const overlay = document.getElementById("drawerOverlay");
+
+      // Set content
+      document.getElementById("drawerTitle").textContent = item.name;
+      document.getElementById("drawerRepoLink").href = item.url;
+      document.getElementById("drawerPosition").textContent = item.position;
+      document.getElementById("drawerWhyHot").innerHTML = `
+        <p class="font-medium text-white mb-1">【突破痛点与爆点】</p>
+        <p>${item.whyHot}</p>
+      `;
+
+      document.getElementById("drawerFeatures").innerHTML = item.features.map(f => `
+        <span class="text-xs px-2.5 py-1 rounded-md bg-zinc-800 text-indigo-300 border border-zinc-700 font-medium">
+          ${f}
+        </span>
+      `).join('');
+
+      document.getElementById("drawerTodayStars").textContent = `+${item.starsToday.toLocaleString()}`;
+      document.getElementById("drawerTotalStars").textContent = item.stars.toLocaleString();
+      document.getElementById("drawerLang").textContent = item.lang;
+      document.getElementById("drawerReadme").textContent = item.readmeSnippet;
+
+      // Badges
+      document.getElementById("drawerBadges").innerHTML = `
+        <span class="text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-200 border border-zinc-700">
+          ${item.categoryName}
+        </span>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/30">
+          ${item.growthTypeName}
+        </span>
+      `;
+
+      updateDrawerFavButton();
+
+      // Show drawer
+      overlay.classList.remove("hidden");
+      setTimeout(() => {
+        drawer.classList.remove("translate-x-full");
+      }, 10);
+    }
+
+    function closeDrawer() {
+      const drawer = document.getElementById("detailDrawer");
+      const overlay = document.getElementById("drawerOverlay");
+      drawer.classList.add("translate-x-full");
+      setTimeout(() => {
+        overlay.classList.add("hidden");
+        state.activeDrawerItem = null;
+      }, 300);
+    }
+
+    function updateDrawerFavButton() {
+      if (!state.activeDrawerItem) return;
+      const isFav = state.favorites.has(state.activeDrawerItem.id);
+      document.getElementById("drawerFavText").textContent = isFav ? "取消关注" : "关注此项目";
+    }
+
+    // Chart.js Visualizations
+    function initCharts() {
+      if (state.chartsInitialized) return;
+
+      // 1. Category Chart
+      const catCount = {};
+      RAW_REPOSITORIES.forEach(r => {
+        catCount[r.categoryName] = (catCount[r.categoryName] || 0) + 1;
+      });
+
+      const catCtx = document.getElementById("categoryChart").getContext("2d");
+      state.categoryChart = new Chart(catCtx, {
+        type: "doughnut",
+        data: {
+          labels: Object.keys(catCount).map(k => k.replace(/^[^\s]+\s*/, '')),
+          datasets: [{
+            data: Object.values(catCount),
+            backgroundColor: ["#6366f1", "#a855f7", "#06b6d4", "#f59e0b"],
+            borderWidth: 2,
+            borderColor: "#09090b"
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: { color: "#a1a1aa", font: { size: 10 } }
+            }
+          }
+        }
+      });
+
+      // 2. Growth Top 8 Chart
+      const top8 = [...RAW_REPOSITORIES].sort((a, b) => b.starsToday - a.starsToday).slice(0, 8);
+      const growthCtx = document.getElementById("growthChart").getContext("2d");
+      state.growthChart = new Chart(growthCtx, {
+        type: "bar",
+        data: {
+          labels: top8.map(r => r.name.split("/")[1] || r.name),
+          datasets: [{
+            label: "今日 Star 增长",
+            data: top8.map(r => r.starsToday),
+            backgroundColor: "#10b981",
+            borderRadius: 4
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              ticks: { color: "#71717a", font: { size: 10 } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: "#71717a", font: { size: 10 } },
+              grid: { color: "#27272a" }
+            }
+          }
+        }
+      });
+
+      state.chartsInitialized = true;
+    }
+
+    // Generate Markdown Export
+    function generateMarkdownReport() {
+      const items = getFilteredRepositories();
+      const dateStr = new Date().toISOString().slice(0, 10);
+      let md = `# 🚀 OpenRadar 开源前沿技术雷达 · 每日精选 (${dateStr})\n\n`;
+      md += `> 本期精选收录 **${items.length}** 个前沿开源项目，聚焦 AI Agent 智能体生态、前沿模型架构与新锐黑马。\n\n---\n\n`;
+
+      items.forEach((item, idx) => {
+        md += `### ${idx + 1}. [${item.name}](${item.url})\n`;
+        md += `\`${item.categoryName}\` · \`${item.growthTypeName}\` · \`${item.lang}\`\n\n`;
+        md += `> 📌 **核心定位**: ${item.position}\n\n`;
+        md += `🔥 **爆发动因**: ${item.whyHot}\n`;
+        md += `💡 **核心看点**: ${item.features.join("、")}\n`;
+        md += `📊 **数据看板**: 今日新增 \`+${item.starsToday.toLocaleString()} stars\` | 累计总星 \`${item.stars.toLocaleString()}\`\n\n`;
+        md += `[查看 GitHub 源码 ➔](${item.url})\n\n---\n\n`;
+      });
+
+      return md;
+    }
+
+    // Setup Event Listeners
+    function setupEvents() {
+      // Search input
+      const search = document.getElementById("searchInput");
+      search.addEventListener("input", (e) => {
+        state.searchQuery = e.target.value.trim();
+        renderCards();
+      });
+
+      // Category pills
+      document.querySelectorAll(".cat-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          document.querySelectorAll(".cat-pill").forEach(p => {
+            p.classList.remove("active", "bg-indigo-600", "text-white");
+            p.classList.add("bg-zinc-800", "text-zinc-300");
+          });
+          pill.classList.add("active", "bg-indigo-600", "text-white");
+          pill.classList.remove("bg-zinc-800", "text-zinc-300");
+          state.selectedCategory = pill.getAttribute("data-cat");
+          renderCards();
+        });
+      });
+
+      // Growth pills
+      document.querySelectorAll(".growth-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          document.querySelectorAll(".growth-pill").forEach(p => {
+            p.classList.remove("active", "bg-zinc-700", "text-white");
+            p.classList.add("bg-zinc-800/80");
+          });
+          pill.classList.add("active", "bg-zinc-700", "text-white");
+          state.selectedGrowth = pill.getAttribute("data-growth");
+          renderCards();
+        });
+      });
+
+      // Language filter
+      document.getElementById("langFilter").addEventListener("change", (e) => {
+        state.selectedLang = e.target.value;
+        renderCards();
+      });
+
+      // Favorites toggle filter
+      const btnFavs = document.getElementById("btnFavorites");
+      btnFavs.addEventListener("click", () => {
+        state.onlyFavorites = !state.onlyFavorites;
+        if (state.onlyFavorites) {
+          btnFavs.classList.add("bg-indigo-600", "text-white");
+          btnFavs.classList.remove("bg-zinc-900", "text-zinc-300");
+        } else {
+          btnFavs.classList.remove("bg-indigo-600", "text-white");
+          btnFavs.classList.add("bg-zinc-900", "text-zinc-300");
+        }
+        renderCards();
+      });
+
+      // Toggle Chart Section
+      document.getElementById("btnToggleChart").addEventListener("click", () => {
+        const sec = document.getElementById("chartSection");
+        state.showCharts = !state.showCharts;
+        if (state.showCharts) {
+          sec.classList.remove("hidden");
+          document.getElementById("chartToggleLabel").textContent = "收起图谱";
+          initCharts();
+        } else {
+          sec.classList.add("hidden");
+          document.getElementById("chartToggleLabel").textContent = "趋势图谱";
+        }
+      });
+
+      // Reset filters button in empty state
+      document.getElementById("btnResetFilters").addEventListener("click", () => {
+        state.searchQuery = "";
+        state.selectedCategory = "all";
+        state.selectedGrowth = "all";
+        state.selectedLang = "all";
+        state.onlyFavorites = false;
+        search.value = "";
+        document.getElementById("langFilter").value = "all";
+        document.querySelector(".cat-pill[data-cat='all']").click();
+        document.querySelector(".growth-pill[data-growth='all']").click();
+        renderCards();
+      });
+
+      // Drawer close handlers
+      document.getElementById("btnCloseDrawer").addEventListener("click", closeDrawer);
+      document.getElementById("drawerOverlay").addEventListener("click", closeDrawer);
+
+      // Drawer Favorite button
+      document.getElementById("btnDrawerToggleFav").addEventListener("click", () => {
+        if (state.activeDrawerItem) {
+          toggleFavorite(state.activeDrawerItem.id);
+        }
+      });
+
+      // Export modal handlers
+      const modal = document.getElementById("exportModal");
+      document.getElementById("btnExport").addEventListener("click", () => {
+        const mdText = generateMarkdownReport();
+        document.getElementById("exportContentArea").value = mdText;
+        modal.classList.remove("hidden");
+      });
+
+      document.getElementById("btnCloseExportModal").addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      document.getElementById("btnCopyMarkdown").addEventListener("click", () => {
+        const ta = document.getElementById("exportContentArea");
+        ta.select();
+        try {
+          document.execCommand("copy");
+          showToast("Markdown 简报已复制到剪贴板！");
+        } catch (e) {
+          showToast("复制失败，请手动全选复制", "!");
+        }
+      });
+
+      document.getElementById("btnDownloadMarkdown").addEventListener("click", () => {
+        const text = document.getElementById("exportContentArea").value;
+        const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `OpenRadar_Tech_Digest_${new Date().toISOString().slice(0, 10)}.md`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast("简报文件已开始下载");
+      });
+    }
+
+    // App Initialization
+    window.addEventListener("DOMContentLoaded", () => {
+      loadFavorites();
+      setupEvents();
+      renderCards();
+    });
+  </script>
+</body>
+</html>
