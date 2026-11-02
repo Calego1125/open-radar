@@ -196,7 +196,7 @@ class OpenRadarScraper:
 
 
 def push_to_chat_bot(matrix):
-    """自动兼容飞书与微信（企业微信）机器人的每日早报推送"""
+    """双模机器人自动推送引擎：自动识别飞书与微信（企业微信）机器人"""
     webhook = os.getenv("BOT_WEBHOOK", "").strip()
     if not webhook or not webhook.startswith("http"):
         print("[*] 未配置 BOT_WEBHOOK 密钥，跳过群机器人分发。")
@@ -208,8 +208,8 @@ def push_to_chat_bot(matrix):
     frontier_top1 = matrix["tracks"]["frontier"][0]
     rising_top1 = matrix["tracks"]["rising"][0]
 
-    # 1. 如果是飞书机器人 Webhook
-    if "feishu.cn" in webhook:
+    # 1. 如果是飞书 / Lark 机器人
+    if "feishu.cn" in webhook or "larksuite.com" in webhook:
         card = {
             "config": {"wide_screen_mode": True},
             "header": {
@@ -245,8 +245,8 @@ def push_to_chat_bot(matrix):
                 }
             ]
         }
-        body = {"msg_type": "interactive", "card": card}
-    # 2. 如果是微信 / 企业微信群机器人 Webhook
+        payload = {"msg_type": "interactive", "card": card}
+    # 2. 微信 / 企业微信群机器人
     else:
         text_md = (
             f"### 🚀 OpenRadar 开源前沿技术早报\n"
@@ -261,7 +261,7 @@ def push_to_chat_bot(matrix):
         payload = {"msg_type": "markdown", "markdown": {"content": text_md}}
 
     try:
-        r = requests.post(webhook, json=payload, timeout=8)
+        r = requests.post(webhook, json=payload, timeout=10)
         print(f"[✓] 每日早报已成功推送到群机器人！响应: {r.status_code}")
     except Exception as e:
         print(f"[!] 机器人推送异常: {e}")
