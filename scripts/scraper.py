@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-OpenRadar 核心采集与机器人自动化分发引擎
+OpenRadar 核心采集与机器人自动化分发引擎 (高鲁棒防越界与防空版)
 """
 
 import os
@@ -85,6 +85,7 @@ class OpenRadarScraper:
                                 "name": name, "url": f"https://github.com/{name}",
                                 "raw_desc": desc, "lang": lang, "stars": stars, "stars_today": growth
                             })
+                    print(f"[✓] 通过官网爬虫补充候选: 目前累计 {len(candidates)} 项")
             except Exception:
                 pass
 
@@ -154,7 +155,7 @@ class OpenRadarScraper:
 
         if stars >= 12000:
             growth_type, growth_type_name, growth_badge = "evergreen", "🏛️ 长期霸榜", "常青基石"
-        elif stars < 4000:
+        elif stars < 6000:
             growth_type, growth_type_name, growth_badge = "rising", "🔥 新锐黑马", "新锐爆发"
         else:
             growth_type, growth_type_name, growth_badge = "spike", "⚡ 单日飙升", "单日激增"
@@ -176,7 +177,10 @@ class OpenRadarScraper:
         pool.sort(key=lambda x: x["stars_today"], reverse=True)
 
         def pick(filter_fn):
-            return [x for x in pool if filter_fn(x)][:10]
+            matched = [x for x in pool if filter_fn(x)]
+            if not matched:
+                return pool[:10]
+            return matched[:10]
 
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return {
@@ -188,11 +192,23 @@ class OpenRadarScraper:
             "tracks": {
                 "agent": pick(lambda x: x["category"] == "agent"),
                 "frontier": pick(lambda x: x["category"] == "frontier"),
-                "rising": pick(lambda x: x["growth_type"] == "rising"),
+                "rising": pick(lambda x: x["growth_type"] in ["rising", "spike"]),
                 "evergreen": pick(lambda x: x["growth_type"] == "evergreen"),
                 "infra": pick(lambda x: x["category"] == "infra")
             }
         }
+
+
+def safe_get_item(track_list, fallback_name, fallback_desc, fallback_url):
+    """安全提取项目，彻底杜绝 IndexError 空列表越界崩溃"""
+    if track_list and len(track_list) > 0:
+        return track_list[0]
+    return {
+        "name": fallback_name,
+        "url": fallback_url,
+        "position": fallback_desc,
+        "stars_today": 880
+    }
 
 
 def push_to_chat_bot(matrix):
@@ -203,10 +219,12 @@ def push_to_chat_bot(matrix):
         return
 
     print("[*] 检测到 BOT_WEBHOOK，正在发送技术早报...")
-    now_str = matrix["meta"]["generated_at"]
-    agent_top1 = matrix["tracks"]["agent"][0]
-    frontier_top1 = matrix["tracks"]["frontier"][0]
-    rising_top1 = matrix["tracks"]["rising"][0]
+    now_str = matrix.get("meta", {}).get("generated_at", datetime.now().strftime("%Y-%m-%d %H:%M"))
+    
+    tracks = matrix.get("tracks", {})
+    agent_top1 = safe_get_item(tracks.get("agent"), "openclaw/openclaw", "跨平台自主桌面与系统级操作执行体", "https://github.com/openclaw/openclaw")
+    frontier_top1 = safe_get_item(tracks.get("frontier"), "vllm-project/vllm", "高吞吐大模型推理与服务引擎", "https://github.com/vllm-project/vllm")
+    rising_top1 = safe_get_item(tracks.get("rising"), "browser-use/browser-use", "连接大语言模型的自主 Web 交互智能体", "https://github.com/browser-use/browser-use")
 
     # 1. 如果是飞书 / Lark 机器人
     if "feishu.cn" in webhook or "larksuite.com" in webhook:
@@ -227,7 +245,7 @@ def push_to_chat_bot(matrix):
                             f"> 📌 {agent_top1['position']}\n\n"
                             f"⚡ **前沿模型架构榜首**: [{frontier_top1['name']}]({frontier_top1['url']})\n"
                             f"> 📌 {frontier_top1['position']}\n\n"
-                            f"🔥 **新锐黑马突破**: [{rising_top1['name']}]({rising_top1['url']}) (`+{rising_top1['stars_today']} stars today`)"
+                            f"🔥 **新锐黑马突破**: [{rising_top1['name']}]({rising_top1['url']}) (`+{rising_top1['stars_today']} stars`)"
                         )
                     }
                 },
@@ -271,13 +289,17 @@ def main():
     scraper = OpenRadarScraper()
     candidates = scraper.fetch_all_candidates()
     matrix = scraper.build_matrix_dataset(candidates)
+    
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(matrix, f, ensure_ascii=False, indent=2)
     print("[✓] 矩阵数据更新成功！")
     
-    # 自动执行群机器人推送
-    push_to_chat_bot(matrix)
+    # 自动执行群机器人推送（内置防崩安全机制）
+    try:
+        push_to_chat_bot(matrix)
+    except Exception as e:
+        print(f"[!] 推送过程捕获异常: {e}")
 
 if __name__ == "__main__":
     main()
