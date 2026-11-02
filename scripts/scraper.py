@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-OpenRadar 核心采集与分类引擎
-============================
-1. 抓取全网最新 GitHub 候选项目（涵盖日榜与前沿垂直检索）。
-2. 执行智能降噪与技术赛道精准归类（彻底隔离电子书等资源集合）。
-3. 判定增长动力学属性（新锐黑马 vs 长青基石 vs 单日飙升）。
-4. 深度生成【各个垂直分类的专属 TOP 10 榜单】并输出 data/radar_data.json。
+OpenRadar 核心采集与机器人自动化分发引擎
 """
 
 import os
@@ -127,7 +122,6 @@ class OpenRadarScraper:
         stars_today = item["stars_today"]
         corpus = f"{name} {raw_desc} {lang}".lower()
 
-        # 降噪与资源库隔离
         resource_patterns = ["book", "interview", "awesome", "tutorial", "roadmap", "cheatsheet", "guide", "free-programming"]
         if any(p in corpus for p in resource_patterns):
             category = "resource"
@@ -200,6 +194,79 @@ class OpenRadarScraper:
             }
         }
 
+
+def push_to_chat_bot(matrix):
+    """自动兼容飞书与微信（企业微信）机器人的每日早报推送"""
+    webhook = os.getenv("BOT_WEBHOOK", "").strip()
+    if not webhook or not webhook.startswith("http"):
+        print("[*] 未配置 BOT_WEBHOOK 密钥，跳过群机器人分发。")
+        return
+
+    print("[*] 检测到 BOT_WEBHOOK，正在发送技术早报...")
+    now_str = matrix["meta"]["generated_at"]
+    agent_top1 = matrix["tracks"]["agent"][0]
+    frontier_top1 = matrix["tracks"]["frontier"][0]
+    rising_top1 = matrix["tracks"]["rising"][0]
+
+    # 1. 如果是飞书机器人 Webhook
+    if "feishu.cn" in webhook:
+        card = {
+            "config": {"wide_screen_mode": True},
+            "header": {
+                "template": "indigo",
+                "title": {"tag": "plain_text", "content": "🚀 OpenRadar 开源前沿技术早报"}
+            },
+            "elements": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "lark_md",
+                        "content": (
+                            f"📅 **更新时间**: {now_str} (UTC+8)\n\n"
+                            f"🤖 **今日 Agent 榜首**: [{agent_top1['name']}]({agent_top1['url']})\n"
+                            f"> 📌 {agent_top1['position']}\n\n"
+                            f"⚡ **前沿模型架构榜首**: [{frontier_top1['name']}]({frontier_top1['url']})\n"
+                            f"> 📌 {frontier_top1['position']}\n\n"
+                            f"🔥 **新锐黑马突破**: [{rising_top1['name']}]({rising_top1['url']}) (`+{rising_top1['stars_today']} stars today`)"
+                        )
+                    }
+                },
+                {"tag": "hr"},
+                {
+                    "tag": "action",
+                    "actions": [
+                        {
+                            "tag": "button",
+                            "text": {"tag": "plain_text", "content": "🌐 打开专属技术雷达看板"},
+                            "type": "primary",
+                            "url": "https://calego1125.github.io/open-radar/"
+                        }
+                    ]
+                }
+            ]
+        }
+        body = {"msg_type": "interactive", "card": card}
+    # 2. 如果是微信 / 企业微信群机器人 Webhook
+    else:
+        text_md = (
+            f"### 🚀 OpenRadar 开源前沿技术早报\n"
+            f"> 更新时间：{now_str} (UTC+8)\n\n"
+            f"**🤖 今日 Agent 榜首**: [{agent_top1['name']}]({agent_top1['url']})\n"
+            f"> {agent_top1['position']}\n\n"
+            f"**⚡ 前沿模型架构榜首**: [{frontier_top1['name']}]({frontier_top1['url']})\n"
+            f"> {frontier_top1['position']}\n\n"
+            f"**🔥 新锐黑马突破**: [{rising_top1['name']}]({rising_top1['url']}) (`+{rising_top1['stars_today']} stars`)\n\n"
+            f"[👉 点击打开你的在线技术雷达看板](https://calego1125.github.io/open-radar/)"
+        )
+        payload = {"msg_type": "markdown", "markdown": {"content": text_md}}
+
+    try:
+        r = requests.post(webhook, json=payload, timeout=8)
+        print(f"[✓] 每日早报已成功推送到群机器人！响应: {r.status_code}")
+    except Exception as e:
+        print(f"[!] 机器人推送异常: {e}")
+
+
 def main():
     scraper = OpenRadarScraper()
     candidates = scraper.fetch_all_candidates()
@@ -208,6 +275,9 @@ def main():
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(matrix, f, ensure_ascii=False, indent=2)
     print("[✓] 矩阵数据更新成功！")
+    
+    # 自动执行群机器人推送
+    push_to_chat_bot(matrix)
 
 if __name__ == "__main__":
     main()
