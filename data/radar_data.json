@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-11-18 16:35:27",
+    "generated_at": "2026-11-19 16:51:00",
     "timezone": "UTC+8 (Asia/Shanghai)",
-    "total_monitored": 50
+    "total_monitored": 52
   },
   "tracks": {
     "agent": [
@@ -16,30 +16,9 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 467040,
-        "stars_today": 28563,
+        "stars": 468887,
+        "stars_today": 28651,
         "position": "Reverse engineer anything with agents, from app behavior down to native binaries.",
-        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
-        "features": [
-          "自主工作流编排",
-          "外部工具/MCP协议集成",
-          "长短期记忆沉淀",
-          "跨平台环境接管"
-        ]
-      },
-      {
-        "id": "n8n-io-n8n",
-        "name": "n8n-io/n8n",
-        "url": "https://github.com/n8n-io/n8n",
-        "category": "agent",
-        "category_name": "🤖 AI Agent & 智能体",
-        "growth_type": "evergreen",
-        "growth_type_name": "🏛️ 长期霸榜",
-        "growth_badge": "常青基石",
-        "lang": "TypeScript",
-        "stars": 210807,
-        "stars_today": 15387,
-        "position": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
           "自主工作流编排",
@@ -58,8 +37,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 264324,
-        "stars_today": 14911,
+        "stars": 264597,
+        "stars_today": 14935,
         "position": "The agent that grows with you",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -79,8 +58,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 188082,
-        "stars_today": 11465,
+        "stars": 188098,
+        "stars_today": 11464,
         "position": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -100,8 +79,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 161401,
-        "stars_today": 6380,
+        "stars": 161475,
+        "stars_today": 6382,
         "position": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -121,8 +100,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 149837,
-        "stars_today": 6289,
+        "stars": 149874,
+        "stars_today": 6290,
         "position": "The agent engineering platform.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -142,8 +121,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 123018,
-        "stars_today": 5896,
+        "stars": 123118,
+        "stars_today": 5900,
         "position": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -163,8 +142,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 144304,
-        "stars_today": 5790,
+        "stars": 144595,
+        "stars_today": 5808,
         "position": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -184,8 +163,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 114660,
-        "stars_today": 4755,
+        "stars": 114899,
+        "stars_today": 4770,
         "position": "The open-source app everyone uses to manage agents at work",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -205,9 +184,30 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 85744,
-        "stars_today": 4085,
+        "stars": 85835,
+        "stars_today": 4087,
         "position": "🤯 LobeHub - Super-Agents on Your Team. Add super-agents to the chats your team already uses.They take on work by themselves and get better every week.",
+        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
+        "features": [
+          "自主工作流编排",
+          "外部工具/MCP协议集成",
+          "长短期记忆沉淀",
+          "跨平台环境接管"
+        ]
+      },
+      {
+        "id": "browser-use-browser-use",
+        "name": "browser-use/browser-use",
+        "url": "https://github.com/browser-use/browser-use",
+        "category": "agent",
+        "category_name": "🤖 AI Agent & 智能体",
+        "growth_type": "evergreen",
+        "growth_type_name": "🏛️ 长期霸榜",
+        "growth_badge": "常青基石",
+        "lang": "Python",
+        "stars": 121466,
+        "stars_today": 3393,
+        "position": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
           "自主工作流编排",
@@ -228,8 +228,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 169205,
-        "stars_today": 8817,
+        "stars": 169224,
+        "stars_today": 8809,
         "position": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training.",
         "why_hot": "直击大模型推理高延迟与显存瓶颈痛点，在极致能效与高并发吞吐上取得突破性进展。",
         "features": [
@@ -249,8 +249,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 76098,
-        "stars_today": 2346,
+        "stars": 76129,
+        "stars_today": 2347,
         "position": "Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024)",
         "why_hot": "直击大模型推理高延迟与显存瓶颈痛点，在极致能效与高并发吞吐上取得突破性进展。",
         "features": [
@@ -270,30 +270,9 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 79718,
-        "stars_today": 1860,
+        "stars": 79767,
+        "stars_today": 1861,
         "position": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4.1, MiniMax-H3, Gemma 4, FLUX and more.",
-        "why_hot": "直击大模型推理高延迟与显存瓶颈痛点，在极致能效与高并发吞吐上取得突破性进展。",
-        "features": [
-          "底层算力显存优化",
-          "高并发吞吐调度",
-          "多模态架构原生支持",
-          "生产级部署友好"
-        ]
-      },
-      {
-        "id": "jingyaogong-minimind",
-        "name": "jingyaogong/minimind",
-        "url": "https://github.com/jingyaogong/minimind",
-        "category": "frontier",
-        "category_name": "⚡ 前沿科技 & 模型架构",
-        "growth_type": "evergreen",
-        "growth_type_name": "🏛️ 长期霸榜",
-        "growth_badge": "常青基石",
-        "lang": "Python",
-        "stars": 66313,
-        "stars_today": 192,
-        "position": "🧠 Train a 64M-parameter LLM from scratch in just 2h!",
         "why_hot": "直击大模型推理高延迟与显存瓶颈痛点，在极致能效与高并发吞吐上取得突破性进展。",
         "features": [
           "底层算力显存优化",
@@ -314,8 +293,8 @@
         "growth_type_name": "🔥 新锐黑马",
         "growth_badge": "新锐爆发",
         "lang": "Python",
-        "stars": 3469,
-        "stars_today": 1072,
+        "stars": 4662,
+        "stars_today": 1524,
         "position": "PaperOrchestra is a multi-agent framework for automated AI research paper writing.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -323,27 +302,6 @@
           "外部工具/MCP协议集成",
           "长短期记忆沉淀",
           "跨平台环境接管"
-        ]
-      },
-      {
-        "id": "elementalsouls-claude-bughunter",
-        "name": "elementalsouls/Claude-BugHunter",
-        "url": "https://github.com/elementalsouls/Claude-BugHunter",
-        "category": "infra",
-        "category_name": "🛠️ 基础设施 & 开发者工具",
-        "growth_type": "spike",
-        "growth_type_name": "⚡ 单日飙升",
-        "growth_badge": "单日激增",
-        "lang": "Python",
-        "stars": 10058,
-        "stars_today": 1005,
-        "position": "A Claude Code skill bundle for bug hunting and external red-team work - 82 skills, 15 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
-        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
-        "features": [
-          "Python 现代化架构",
-          "极简人体工学设计",
-          "高内聚松耦合",
-          "零侵入开箱即用"
         ]
       },
       {
@@ -356,8 +314,8 @@
         "growth_type_name": "⚡ 单日飙升",
         "growth_badge": "单日激增",
         "lang": "Go",
-        "stars": 9516,
-        "stars_today": 618,
+        "stars": 9989,
+        "stars_today": 547,
         "position": "Modern Docker Management, Designed for Everyone",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -365,27 +323,6 @@
           "极简人体工学设计",
           "高内聚松耦合",
           "零侵入开箱即用"
-        ]
-      },
-      {
-        "id": "tencent-loopforge",
-        "name": "Tencent/LoopForge",
-        "url": "https://github.com/Tencent/LoopForge",
-        "category": "agent",
-        "category_name": "🤖 AI Agent & 智能体",
-        "growth_type": "rising",
-        "growth_type_name": "🔥 新锐黑马",
-        "growth_badge": "新锐爆发",
-        "lang": "Go",
-        "stars": 3603,
-        "stars_today": 591,
-        "position": "Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants.",
-        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
-        "features": [
-          "自主工作流编排",
-          "外部工具/MCP协议集成",
-          "长短期记忆沉淀",
-          "跨平台环境接管"
         ]
       },
       {
@@ -398,9 +335,72 @@
         "growth_type_name": "⚡ 单日飙升",
         "growth_badge": "单日激增",
         "lang": "TypeScript",
-        "stars": 10231,
-        "stars_today": 350,
+        "stars": 10531,
+        "stars_today": 365,
         "position": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.",
+        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
+        "features": [
+          "自主工作流编排",
+          "外部工具/MCP协议集成",
+          "长短期记忆沉淀",
+          "跨平台环境接管"
+        ]
+      },
+      {
+        "id": "nvidia-skillevaluator",
+        "name": "NVIDIA/SkillEvaluator",
+        "url": "https://github.com/NVIDIA/SkillEvaluator",
+        "category": "agent",
+        "category_name": "🤖 AI Agent & 智能体",
+        "growth_type": "rising",
+        "growth_type_name": "🔥 新锐黑马",
+        "growth_badge": "新锐爆发",
+        "lang": "Python",
+        "stars": 3938,
+        "stars_today": 312,
+        "position": "Multi-tier framework for evaluating AI agent skills and plugins with quality gates, security scanning, harness compatibility checks, semantic overlap detection, synthetic evaluation dataset generation, and live agent evaluation that measures how skills affect agent behavior. Ships reusable CI templates that bring every check to any repository.",
+        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
+        "features": [
+          "自主工作流编排",
+          "外部工具/MCP协议集成",
+          "长短期记忆沉淀",
+          "跨平台环境接管"
+        ]
+      },
+      {
+        "id": "deanchensj-jiangshan-map",
+        "name": "DeanChensj/jiangshan-map",
+        "url": "https://github.com/DeanChensj/jiangshan-map",
+        "category": "infra",
+        "category_name": "🛠️ 基础设施 & 开发者工具",
+        "growth_type": "spike",
+        "growth_type_name": "⚡ 单日飙升",
+        "growth_badge": "单日激增",
+        "lang": "JavaScript",
+        "stars": 8300,
+        "stars_today": 218,
+        "position": "江山时序 · 中国历史交互地图时间轴 (403 BCE – Present) | Interactive Historical Atlas of China across 18 dynasties, 198 territory snapshots, ancient-to-modern place genealogy & classical poetry routes",
+        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
+        "features": [
+          "JavaScript 现代化架构",
+          "极简人体工学设计",
+          "高内聚松耦合",
+          "零侵入开箱即用"
+        ]
+      },
+      {
+        "id": "openvinotoolkit-openvino",
+        "name": "openvinotoolkit/openvino",
+        "url": "https://github.com/openvinotoolkit/openvino",
+        "category": "agent",
+        "category_name": "🤖 AI Agent & 智能体",
+        "growth_type": "spike",
+        "growth_type_name": "⚡ 单日飙升",
+        "growth_badge": "单日激增",
+        "lang": "C++",
+        "stars": 11422,
+        "stars_today": 24,
+        "position": "OpenVINO™ is an open source toolkit for optimizing and deploying AI inference",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
           "自主工作流编排",
@@ -421,30 +421,9 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 467040,
-        "stars_today": 28563,
+        "stars": 468887,
+        "stars_today": 28651,
         "position": "Reverse engineer anything with agents, from app behavior down to native binaries.",
-        "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
-        "features": [
-          "自主工作流编排",
-          "外部工具/MCP协议集成",
-          "长短期记忆沉淀",
-          "跨平台环境接管"
-        ]
-      },
-      {
-        "id": "n8n-io-n8n",
-        "name": "n8n-io/n8n",
-        "url": "https://github.com/n8n-io/n8n",
-        "category": "agent",
-        "category_name": "🤖 AI Agent & 智能体",
-        "growth_type": "evergreen",
-        "growth_type_name": "🏛️ 长期霸榜",
-        "growth_badge": "常青基石",
-        "lang": "TypeScript",
-        "stars": 210807,
-        "stars_today": 15387,
-        "position": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
           "自主工作流编排",
@@ -463,8 +442,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 264324,
-        "stars_today": 14911,
+        "stars": 264597,
+        "stars_today": 14935,
         "position": "The agent that grows with you",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -484,8 +463,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "JavaScript",
-        "stars": 159611,
-        "stars_today": 11526,
+        "stars": 159616,
+        "stars_today": 11527,
         "position": "开源社区协作维护的学习目录与知识索引库，专注于 Java 面试 & 后端通用面试指南，覆盖计算机基础、数据库、分布式、高并发、系统设计与 AI 应用开发。",
         "why_hot": "作为开源社区常青知识底座，因近期内容扩充与分类更新持续获得高频收藏。",
         "features": [
@@ -505,8 +484,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 188082,
-        "stars_today": 11465,
+        "stars": 188098,
+        "stars_today": 11464,
         "position": "AutoGPT is the vision of accessible AI for everyone, to use and to build on. Our mission is to provide the tools, so that you can focus on what matters.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -526,8 +505,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 169205,
-        "stars_today": 8817,
+        "stars": 169224,
+        "stars_today": 8809,
         "position": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training.",
         "why_hot": "直击大模型推理高延迟与显存瓶颈痛点，在极致能效与高并发吞吐上取得突破性进展。",
         "features": [
@@ -547,8 +526,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 161401,
-        "stars_today": 6380,
+        "stars": 161475,
+        "stars_today": 6382,
         "position": "Build Agentic workflows, RAG pipelines, with rich AI model and tool support on one collaborative workspace. Deploy on cloud, VPC, or self-hosted, so teams move from prototype to production without rebuilding the stack.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -568,8 +547,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 149837,
-        "stars_today": 6289,
+        "stars": 149874,
+        "stars_today": 6290,
         "position": "The agent engineering platform.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -589,8 +568,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 123018,
-        "stars_today": 5896,
+        "stars": 123118,
+        "stars_today": 5900,
         "position": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -610,8 +589,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 144304,
-        "stars_today": 5790,
+        "stars": 144595,
+        "stars_today": 5808,
         "position": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
         "why_hot": "踩中智能体自主操作与多工具协议爆发节点，极大降低了复杂工作流落地的工程复杂度。",
         "features": [
@@ -619,6 +598,27 @@
           "外部工具/MCP协议集成",
           "长短期记忆沉淀",
           "跨平台环境接管"
+        ]
+      },
+      {
+        "id": "open-webui-open-webui",
+        "name": "open-webui/open-webui",
+        "url": "https://github.com/open-webui/open-webui",
+        "category": "infra",
+        "category_name": "🛠️ 基础设施 & 开发者工具",
+        "growth_type": "evergreen",
+        "growth_type_name": "🏛️ 长期霸榜",
+        "growth_badge": "常青基石",
+        "lang": "Svelte",
+        "stars": 159070,
+        "stars_today": 5777,
+        "position": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
+        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
+        "features": [
+          "Svelte 现代化架构",
+          "极简人体工学设计",
+          "高内聚松耦合",
+          "零侵入开箱即用"
         ]
       }
     ],
@@ -633,8 +633,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Svelte",
-        "stars": 158993,
-        "stars_today": 5776,
+        "stars": 159070,
+        "stars_today": 5777,
         "position": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -654,8 +654,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Go",
-        "stars": 187487,
-        "stars_today": 4783,
+        "stars": 187580,
+        "stars_today": 4789,
         "position": "Get up and running with Kimi, GLM, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models.",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -675,8 +675,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 149831,
-        "stars_today": 3598,
+        "stars": 150323,
+        "stars_today": 3613,
         "position": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -696,8 +696,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 90869,
-        "stars_today": 3526,
+        "stars": 90923,
+        "stars_today": 3528,
         "position": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -717,8 +717,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Rust",
-        "stars": 104547,
-        "stars_today": 3397,
+        "stars": 104609,
+        "stars_today": 3398,
         "position": "π RuView turns commodity WiFi signals into real-time spatial intelligence, vital sign monitoring, and presence detection — all without a single pixel of video.",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -738,8 +738,8 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "TypeScript",
-        "stars": 93718,
-        "stars_today": 3138,
+        "stars": 93807,
+        "stars_today": 3140,
         "position": "🙌 OpenHands: AI-Driven Development",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
@@ -759,54 +759,12 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "Python",
-        "stars": 104038,
-        "stars_today": 2714,
+        "stars": 104283,
+        "stars_today": 2722,
         "position": "🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here: https://discord.gg/EMgGbDceNQ and follow here for daily tips and tricks: https://x.com/Scrapling_dev",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
           "Python 现代化架构",
-          "极简人体工学设计",
-          "高内聚松耦合",
-          "零侵入开箱即用"
-        ]
-      },
-      {
-        "id": "elementalsouls-claude-bughunter",
-        "name": "elementalsouls/Claude-BugHunter",
-        "url": "https://github.com/elementalsouls/Claude-BugHunter",
-        "category": "infra",
-        "category_name": "🛠️ 基础设施 & 开发者工具",
-        "growth_type": "spike",
-        "growth_type_name": "⚡ 单日飙升",
-        "growth_badge": "单日激增",
-        "lang": "Python",
-        "stars": 10058,
-        "stars_today": 1005,
-        "position": "A Claude Code skill bundle for bug hunting and external red-team work - 82 skills, 15 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
-        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
-        "features": [
-          "Python 现代化架构",
-          "极简人体工学设计",
-          "高内聚松耦合",
-          "零侵入开箱即用"
-        ]
-      },
-      {
-        "id": "getarcaneapp-arcane",
-        "name": "getarcaneapp/arcane",
-        "url": "https://github.com/getarcaneapp/arcane",
-        "category": "infra",
-        "category_name": "🛠️ 基础设施 & 开发者工具",
-        "growth_type": "spike",
-        "growth_type_name": "⚡ 单日飙升",
-        "growth_badge": "单日激增",
-        "lang": "Go",
-        "stars": 9516,
-        "stars_today": 618,
-        "position": "Modern Docker Management, Designed for Everyone",
-        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
-        "features": [
-          "Go 现代化架构",
           "极简人体工学设计",
           "高内聚松耦合",
           "零侵入开箱即用"
@@ -822,12 +780,54 @@
         "growth_type_name": "🏛️ 长期霸榜",
         "growth_badge": "常青基石",
         "lang": "JavaScript",
-        "stars": 89586,
-        "stars_today": 477,
+        "stars": 89721,
+        "stars_today": 692,
         "position": "web development for the rest of us",
         "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
         "features": [
           "JavaScript 现代化架构",
+          "极简人体工学设计",
+          "高内聚松耦合",
+          "零侵入开箱即用"
+        ]
+      },
+      {
+        "id": "getarcaneapp-arcane",
+        "name": "getarcaneapp/arcane",
+        "url": "https://github.com/getarcaneapp/arcane",
+        "category": "infra",
+        "category_name": "🛠️ 基础设施 & 开发者工具",
+        "growth_type": "spike",
+        "growth_type_name": "⚡ 单日飙升",
+        "growth_badge": "单日激增",
+        "lang": "Go",
+        "stars": 9989,
+        "stars_today": 547,
+        "position": "Modern Docker Management, Designed for Everyone",
+        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
+        "features": [
+          "Go 现代化架构",
+          "极简人体工学设计",
+          "高内聚松耦合",
+          "零侵入开箱即用"
+        ]
+      },
+      {
+        "id": "cursor-plugins",
+        "name": "cursor/plugins",
+        "url": "https://github.com/cursor/plugins",
+        "category": "infra",
+        "category_name": "🛠️ 基础设施 & 开发者工具",
+        "growth_type": "evergreen",
+        "growth_type_name": "🏛️ 长期霸榜",
+        "growth_badge": "常青基石",
+        "lang": "TypeScript",
+        "stars": 17361,
+        "stars_today": 314,
+        "position": "Cursor plugin specification and official plugins",
+        "why_hot": "重塑了传统的繁琐研发链路，在编译速度、开发体验与资源利用率上实现了跃升。",
+        "features": [
+          "TypeScript 现代化架构",
           "极简人体工学设计",
           "高内聚松耦合",
           "零侵入开箱即用"
